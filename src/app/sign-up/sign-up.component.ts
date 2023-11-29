@@ -34,7 +34,6 @@ export class SignUpComponent implements OnInit {
   }
 
   onClickSignUp() {
-    console.log('clicked');
     fetch('/api/1.0/users', {
       method: 'POST',
       body: JSON.stringify({
