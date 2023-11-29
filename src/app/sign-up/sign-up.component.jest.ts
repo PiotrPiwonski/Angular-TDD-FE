@@ -1,13 +1,30 @@
-import { render, screen } from '@testing-library/angular';
+import {render, screen, waitFor} from '@testing-library/angular';
 import { SignUpComponent } from "./sign-up.component";
 import userEvent from "@testing-library/user-event";
-import "whatwg-fetch";
-import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
-import {TestBed} from "@angular/core/testing";
+// import "whatwg-fetch";
+// import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
+// import {TestBed} from "@angular/core/testing";
+import {rest} from "msw";
+import {setupServer} from "msw/node";
+import {HttpClientModule} from "@angular/common/http";
+
+let requestBody: any;
+const server = setupServer(
+  rest.post('/api/1.0/users',
+    (req, res, ctx) => {
+      requestBody = req.body
+      return res(ctx.status(200), ctx.json({}))
+    })
+);
+
+beforeAll(() => server.listen());
+
+afterAll(() => server.close());
 
 const setup = async () => {
   await render(SignUpComponent, {
-    imports: [HttpClientTestingModule]
+    // imports: [HttpClientTestingModule]
+    imports: [HttpClientModule]
   });
 }
 
@@ -79,8 +96,9 @@ describe('SignUpComponent', () => {
 
     it('sends username, email and password after clicking the button', async () => {
       // const spy = jest.spyOn(window, 'fetch');
+
       await setup();
-      let httpTestingController = TestBed.inject(HttpTestingController);
+      // let httpTestingController = TestBed.inject(HttpTestingController);
       const usernameInput = screen.getByLabelText('Username');
       const emailInput = screen.getByLabelText('E-mail');
       const passwordInput = screen.getByLabelText('Password');
@@ -91,8 +109,17 @@ describe('SignUpComponent', () => {
       await userEvent.type(passwordRepeatInput, 'P4ssword');
       const button = screen.getByRole('button', {name: 'Sign Up'});
       await userEvent.click(button);
-      const req = httpTestingController.expectOne('/api/1.0/users');
-      const requestBody = req.request.body;
+
+      await waitFor(() => {
+        expect(requestBody).toEqual({
+          username: 'user1',
+          email: 'user1@mail.com',
+          password: 'P4ssword'
+        });
+      })
+
+      // const req = httpTestingController.expectOne('/api/1.0/users');
+      // const requestBody = req.request.body;
 
       // const args = spy.mock.calls[0];
       // const secondParam = args[1] as RequestInit;
@@ -102,11 +129,11 @@ describe('SignUpComponent', () => {
       //   password: 'P4ssword'
       // }));
 
-      expect(requestBody).toEqual({
-        username: 'user1',
-        email: 'user1@mail.com',
-        password: 'P4ssword'
-      });
+      // expect(requestBody).toEqual({
+      //   username: 'user1',
+      //   email: 'user1@mail.com',
+      //   password: 'P4ssword'
+      // });
 
     });
   });
