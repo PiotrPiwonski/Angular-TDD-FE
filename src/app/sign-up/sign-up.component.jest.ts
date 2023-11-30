@@ -9,13 +9,20 @@ import {setupServer} from "msw/node";
 import {HttpClientModule} from "@angular/common/http";
 
 let requestBody: any;
+let counter: number = 0;
+
 const server = setupServer(
   rest.post('/api/1.0/users',
     (req, res, ctx) => {
       requestBody = req.body
+      counter += 1;
       return res(ctx.status(200), ctx.json({}))
     })
 );
+
+beforeEach(() => {
+  counter = 0;
+});
 
 beforeAll(() => server.listen());
 
@@ -84,21 +91,11 @@ describe('SignUpComponent', () => {
   });
 
   describe('Interactions', () => {
-    it('enables the button when the password and password repeat fields have same value', async () => {
-        await setup();
-        const passwordInput = screen.getByLabelText('Password');
-        const passwordRepeatInput = screen.getByLabelText('Password Repeat');
-        await userEvent.type(passwordInput, 'P4ssword');
-        await userEvent.type(passwordRepeatInput, 'P4ssword');
-        const button = screen.getByRole('button', {name: 'Sign Up'});
-        expect(button).toBeEnabled();
-    });
 
-    it('sends username, email and password after clicking the button', async () => {
-      // const spy = jest.spyOn(window, 'fetch');
+    let button: any;
 
+    const setupForm = async () => {
       await setup();
-      // let httpTestingController = TestBed.inject(HttpTestingController);
       const usernameInput = screen.getByLabelText('Username');
       const emailInput = screen.getByLabelText('E-mail');
       const passwordInput = screen.getByLabelText('Password');
@@ -107,7 +104,20 @@ describe('SignUpComponent', () => {
       await userEvent.type(emailInput, 'user1@mail.com');
       await userEvent.type(passwordInput, 'P4ssword');
       await userEvent.type(passwordRepeatInput, 'P4ssword');
-      const button = screen.getByRole('button', {name: 'Sign Up'});
+      button = screen.getByRole('button', {name: 'Sign Up'});
+    };
+
+    it('enables the button when the password and password repeat fields have same value', async () => {
+      await setupForm();
+      expect(button).toBeEnabled();
+    });
+
+    it('sends username, email and password after clicking the button', async () => {
+      // const spy = jest.spyOn(window, 'fetch');
+
+      // let httpTestingController = TestBed.inject(HttpTestingController);
+
+      await setupForm();
       await userEvent.click(button);
 
       await waitFor(() => {
@@ -134,7 +144,23 @@ describe('SignUpComponent', () => {
       //   email: 'user1@mail.com',
       //   password: 'P4ssword'
       // });
+    });
 
+    it('disables button when there is an ongoing api call',
+      async () => {
+      await setupForm();
+      await userEvent.click(button);
+      await userEvent.click(button);
+      await waitFor(() => {
+        expect(counter).toBe(1);
+      });
+    });
+
+    it('displays spinner after clicking the submit', async () => {
+      await setupForm();
+      expect(screen.queryByRole('status', {hidden: true})).not.toBeInTheDocument();
+      await userEvent.click(button);
+      expect(screen.queryByRole('status', {hidden: true})).toBeInTheDocument();
     });
   });
 
