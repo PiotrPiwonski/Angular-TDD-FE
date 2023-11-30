@@ -80,7 +80,7 @@ describe('SignUpComponent', () => {
     it('has Sign Up button', () => {
       const signUp = fixture.nativeElement as HTMLElement;
       const button = signUp.querySelector('button');
-      expect(button?.textContent).toBe('Sign Up');
+      expect(button?.textContent).toContain('Sign Up');
     });
 
     it('disabled the input initially', () => {
@@ -91,26 +91,14 @@ describe('SignUpComponent', () => {
   });
 
   describe('Interaction', () => {
-    it('enables the button when the password and password repeat fields have same value', () => {
-      const signUp = fixture.nativeElement as HTMLElement;
-      const passwordInput = signUp
-        .querySelector('input[id="password"]') as HTMLInputElement;
-      const passwordRepeatInput = signUp
-        .querySelector('input[id="passwordRepeat"]') as HTMLInputElement;
-      passwordInput.value = 'P4ssword';
-      passwordInput.dispatchEvent(new Event('input'));
-      passwordRepeatInput.value = 'P4ssword';
-      passwordRepeatInput.dispatchEvent(new Event('input'));
-      fixture.detectChanges();
-      const button = signUp.querySelector('button');
-      expect(button?.disabled).toBeFalsy();
-    });
 
-    it('sends username, email and password after clicking the button', () => {
-      // const spy = spyOn(window, 'fetch');
-      let httpTestingController = TestBed.inject(HttpTestingController);
+    let button: any;
+    let httpTestingController: HttpTestingController;
+    let signUp: HTMLElement;
 
-      const signUp = fixture.nativeElement as HTMLElement;
+    const setupForm = () => {
+      httpTestingController = TestBed.inject(HttpTestingController);
+      signUp = fixture.nativeElement as HTMLElement;
       const usernameInput = signUp
         .querySelector('input[id="username"]') as HTMLInputElement;
       const emailInput = signUp
@@ -128,7 +116,17 @@ describe('SignUpComponent', () => {
       passwordRepeatInput.value = 'P4ssword';
       passwordRepeatInput.dispatchEvent(new Event('input'));
       fixture.detectChanges();
-      const button = signUp.querySelector('button');
+      button = signUp.querySelector('button');
+    };
+
+    it('enables the button when the password and password repeat fields have same value', () => {
+      setupForm();
+      expect(button?.disabled).toBeFalsy();
+    });
+
+    it('sends username, email and password after clicking the button', () => {
+      // const spy = spyOn(window, 'fetch');
+      setupForm();
       button?.click();
       const req = httpTestingController.expectOne('/api/1.0/users');
       const requestBody = req.request.body;
@@ -146,8 +144,25 @@ describe('SignUpComponent', () => {
         email: 'user1@mail.com',
         password: 'P4ssword'
       });
-
     });
+
+    it('disables button when there is an ongoing api call', () => {
+      setupForm();
+      button?.click();
+      fixture.detectChanges();
+      button?.click();
+      httpTestingController.expectOne('/api/1.0/users');
+      expect(button.disabled).toBeTruthy();
+    });
+
+    it('displays spinner after clicking the submit', () => {
+      setupForm();
+      expect(signUp.querySelector('span[role="status"]')).toBeFalsy();
+      button?.click();
+      fixture.detectChanges();
+      expect(signUp.querySelector('span[role="status"]')).toBeTruthy();
+    });
+
   });
 
 });
