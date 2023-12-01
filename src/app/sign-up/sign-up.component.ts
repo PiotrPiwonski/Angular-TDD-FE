@@ -20,22 +20,6 @@ export class SignUpComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onChangeUsername(event: Event) {
-    this.username = (event.target as HTMLInputElement).value;
-  }
-
-  onChangeEmail(event: Event) {
-    this.email = (event.target as HTMLInputElement).value;
-  }
-
-  onChangePassword(event: Event) {
-    this.password = (event.target as HTMLInputElement).value;
-  }
-
-  onChangePasswordRepeat(event: Event) {
-    this.passwordRepeat = (event.target as HTMLInputElement).value;
-  }
-
   onClickSignUp() {
     // fetch('/api/1.0/users', {
     //   method: 'POST',

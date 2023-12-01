@@ -12,11 +12,21 @@
     <form class="card-body" (submit)="onClickSignUp(); $event.preventDefault()">
       <div class="mb-3">
         <label class="form-label" for="username">Username</label>
-        <input class="form-control" id="username" (input)="onChangeUsername($event)"/>
+        <input
+          class="form-control"
+          id="username"
+          name="username"
+          [(ngModel)]="username"
+        />
       </div>
       <div class="mb-3">
         <label class="form-label" for="email">E-mail</label>
-        <input class="form-control" id="email" (input)="onChangeEmail($event)"/>
+        <input
+          class="form-control"
+          id="email"
+          name="email"
+          [(ngModel)]="email"
+        />
       </div>
       <div class="mb-3">
         <label class="form-label" for="password">Password</label>
@@ -24,7 +34,8 @@
           class="form-control"
           id="password"
           type="password"
-          (input)="onChangePassword($event)"
+          name="password"
+          [(ngModel)]="password"
         />
       </div>
       <div class="mb-3">
@@ -33,7 +44,8 @@
           class="form-control"
           id="passwordRepeat"
           type="password"
-          (input)="onChangePasswordRepeat($event)"
+          name="passwordRepeat"
+          [(ngModel)]="passwordRepeat"
         />
       </div>
       <div class="text-center">
