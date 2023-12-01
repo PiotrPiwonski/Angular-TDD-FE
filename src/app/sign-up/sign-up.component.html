@@ -9,14 +9,17 @@
     <div class="card-header text-center">
       <h1>Sign Up</h1>
     </div>
-    <form class="card-body" (submit)="onClickSignUp(); $event.preventDefault()">
+    <form
+      class="card-body"
+      (ngSubmit)="onClickSignUp()"
+      [formGroup]="form"
+    >
       <div class="mb-3">
         <label class="form-label" for="username">Username</label>
         <input
           class="form-control"
           id="username"
-          name="username"
-          [(ngModel)]="username"
+          formControlName="username"
         />
       </div>
       <div class="mb-3">
@@ -24,8 +27,7 @@
         <input
           class="form-control"
           id="email"
-          name="email"
-          [(ngModel)]="email"
+          formControlName="email"
         />
       </div>
       <div class="mb-3">
@@ -34,8 +36,7 @@
           class="form-control"
           id="password"
           type="password"
-          name="password"
-          [(ngModel)]="password"
+          formControlName="password"
         />
       </div>
       <div class="mb-3">
@@ -44,8 +45,7 @@
           class="form-control"
           id="passwordRepeat"
           type="password"
-          name="passwordRepeat"
-          [(ngModel)]="passwordRepeat"
+          formControlName="passwordRepeat"
         />
       </div>
       <div class="text-center">
