@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
 import { SignUpComponent } from './sign-up.component';
 import {SharedModule} from "../shared/shared.module";
-import {FormsModule} from "@angular/forms";
+import {ReactiveFormsModule} from "@angular/forms";
 
 describe('SignUpComponent', () => {
   let component: SignUpComponent;
@@ -16,7 +16,7 @@ describe('SignUpComponent', () => {
       imports: [
         HttpClientTestingModule,
         SharedModule,
-        FormsModule
+        ReactiveFormsModule
       ]
     })
     .compileComponents();

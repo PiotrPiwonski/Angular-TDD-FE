@@ -8,7 +8,7 @@ import {rest} from "msw";
 import {setupServer} from "msw/node";
 import {HttpClientModule} from "@angular/common/http";
 import {SharedModule} from "../shared/shared.module";
-import {FormsModule} from "@angular/forms";
+import {ReactiveFormsModule} from "@angular/forms";
 
 let requestBody: any;
 let counter: number = 0;
@@ -36,7 +36,7 @@ const setup = async () => {
     imports: [
       HttpClientModule,
       SharedModule,
-      FormsModule
+      ReactiveFormsModule
     ]
   });
 }
