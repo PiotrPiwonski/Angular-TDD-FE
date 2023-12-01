@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {UserService} from "../core/user.service";
-import {FormControl, FormGroup} from "@angular/forms";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-sign-up',
@@ -10,7 +10,10 @@ import {FormControl, FormGroup} from "@angular/forms";
 export class SignUpComponent implements OnInit {
 
   form = new FormGroup({
-    username: new FormControl(''),
+    username: new FormControl('', [
+      Validators.required,
+      Validators.minLength(4)
+    ]),
     email: new FormControl(''),
     password: new FormControl(''),
     passwordRepeat: new FormControl('')
