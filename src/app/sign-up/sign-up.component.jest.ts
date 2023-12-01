@@ -8,6 +8,7 @@ import {rest} from "msw";
 import {setupServer} from "msw/node";
 import {HttpClientModule} from "@angular/common/http";
 import {SharedModule} from "../shared/shared.module";
+import {FormsModule} from "@angular/forms";
 
 let requestBody: any;
 let counter: number = 0;
@@ -32,7 +33,11 @@ afterAll(() => server.close());
 const setup = async () => {
   await render(SignUpComponent, {
     // imports: [HttpClientTestingModule]
-    imports: [HttpClientModule, SharedModule]
+    imports: [
+      HttpClientModule,
+      SharedModule,
+      FormsModule
+    ]
   });
 }
 
