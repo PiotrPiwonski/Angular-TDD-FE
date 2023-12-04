@@ -14,8 +14,8 @@ export class SignUpComponent implements OnInit {
       Validators.required,
       Validators.minLength(4)
     ]),
-    email: new FormControl(''),
-    password: new FormControl(''),
+    email: new FormControl('', [Validators.required]),
+    password: new FormControl('', [Validators.required]),
     passwordRepeat: new FormControl('')
   });
 
@@ -34,6 +34,26 @@ export class SignUpComponent implements OnInit {
         return "Username is required";
       } else {
         return "Username must be at least 4 characters long";
+      }
+    }
+    return;
+  }
+
+  get emailError() {
+    const field = this.form.get('email');
+    if((field?.errors && (field?.touched || field?.dirty))) {
+      if(field.errors['required']) {
+        return "E-mail is required";
+      }
+    }
+    return;
+  }
+
+  get passwordError() {
+    const field = this.form.get('password');
+    if((field?.errors && (field?.touched || field?.dirty))) {
+      if(field.errors['required']) {
+        return "Password is required";
       }
     }
     return;
