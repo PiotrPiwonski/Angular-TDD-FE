@@ -18,11 +18,13 @@
         <label class="form-label" for="username">Username</label>
         <input
           class="form-control"
+          [ngClass]="usernameError ? 'is-invalid' : 'is-valid'"
           id="username"
           formControlName="username"
         />
         <div
           data-testid="username-validation"
+          class="invalid-feedback"
           *ngIf="usernameError"
         >
           {{usernameError}}
