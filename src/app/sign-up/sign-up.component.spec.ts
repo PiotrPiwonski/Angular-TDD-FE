@@ -203,6 +203,8 @@ describe('SignUpComponent', () => {
     const testCase = [
       {field: 'username', value: '', error: 'Username is required'},
       {field: 'username', value: '123', error: 'Username must be at least 4 characters long'},
+      {field: 'email', value: '', error: 'E-mail is required'},
+      {field: 'password', value: '', error: 'Password is required'},
     ];
 
     testCase.forEach(({field, value, error}) => {

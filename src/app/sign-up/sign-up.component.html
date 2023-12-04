@@ -18,7 +18,7 @@
         <label class="form-label" for="username">Username</label>
         <input
           class="form-control"
-          [ngClass]="usernameError ? 'is-invalid' : 'is-valid'"
+          [ngClass]="usernameError ? 'is-invalid' : ''"
           id="username"
           formControlName="username"
         />
@@ -34,18 +34,34 @@
         <label class="form-label" for="email">E-mail</label>
         <input
           class="form-control"
+          [ngClass]="emailError ? 'is-invalid' : ''"
           id="email"
           formControlName="email"
         />
+        <div
+          data-testid="email-validation"
+          class="invalid-feedback"
+          *ngIf="emailError"
+        >
+          {{emailError}}
+        </div>
       </div>
       <div class="mb-3">
         <label class="form-label" for="password">Password</label>
         <input
           class="form-control"
+          [ngClass]="passwordError ? 'is-invalid' : ''"
           id="password"
           type="password"
           formControlName="password"
         />
+        <div
+          data-testid="password-validation"
+          class="invalid-feedback"
+          *ngIf="passwordError"
+        >
+          {{passwordError}}
+        </div>
       </div>
       <div class="mb-3">
         <label class="form-label" for="passwordRepeat">Password Repeat</label>
