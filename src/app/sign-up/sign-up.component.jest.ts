@@ -204,6 +204,7 @@ describe('SignUpComponent', () => {
     ${'Password'} | ${'passWORD'} | ${'Password must have at least 1 uppercase, 1 lowercase letter and 1 number'}
     ${'Password'} | ${'pass1234'} | ${'Password must have at least 1 uppercase, 1 lowercase letter and 1 number'}
     ${'Password'} | ${'PASS1234'} | ${'Password must have at least 1 uppercase, 1 lowercase letter and 1 number'}
+    ${'Password Repeat'} | ${'pass'} | ${'Password mismatch'}
     `('displays $message when $label has the value "$inputValue"',
       async ({label, inputValue, message}) => {
         await setup();
