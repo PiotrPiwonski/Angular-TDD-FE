@@ -210,6 +210,7 @@ describe('SignUpComponent', () => {
       {field: 'password', value: 'passWORD', error: 'Password must have at least 1 uppercase, 1 lowercase letter and 1 number'},
       {field: 'password', value: 'pass1234', error: 'Password must have at least 1 uppercase, 1 lowercase letter and 1 number'},
       {field: 'password', value: 'PASS1234', error: 'Password must have at least 1 uppercase, 1 lowercase letter and 1 number'},
+      {field: 'passwordRepeat', value: 'pass', error: 'Password mismatch'},
     ];
 
     testCase.forEach(({field, value, error}) => {
