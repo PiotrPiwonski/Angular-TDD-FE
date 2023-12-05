@@ -22,6 +22,11 @@ const server = setupServer(
     (req, res, ctx) => {
       requestBody = req.body
       counter += 1;
+      if(requestBody.email === 'not-unique@mail.com') {
+        return res(ctx.status(400), ctx.json({
+          validationErrors: {email: 'E-mail in use'}
+        }))
+      }
       return res(ctx.status(200), ctx.json({}))
     }),
   rest.post('/api/1.0/user/email',
@@ -36,6 +41,7 @@ const server = setupServer(
 
 beforeEach(() => {
   counter = 0;
+  server.resetHandlers();
 });
 
 beforeAll(() => server.listen());
@@ -112,14 +118,14 @@ describe('SignUpComponent', () => {
 
     let button: any;
 
-    const setupForm = async () => {
+    const setupForm = async (values?: {email: string}) => {
       await setup();
       const usernameInput = screen.getByLabelText('Username');
       const emailInput = screen.getByLabelText('E-mail');
       const passwordInput = screen.getByLabelText('Password');
       const passwordRepeatInput = screen.getByLabelText('Password Repeat');
       await userEvent.type(usernameInput, 'user1');
-      await userEvent.type(emailInput, 'user1@mail.com');
+      await userEvent.type(emailInput, values?.email || 'user1@mail.com');
       await userEvent.type(passwordInput, 'P4ssword');
       await userEvent.type(passwordRepeatInput, 'P4ssword');
       button = screen.getByRole('button', {name: 'Sign Up'});
@@ -200,6 +206,13 @@ describe('SignUpComponent', () => {
       await screen
           .findByText('Please check your e-mail to activation your account');
       expect(form).not.toBeInTheDocument();
+    });
+    it('displays validation error coming from backend after submit failure',
+      async () => {
+      await setupForm({email: 'not-unique@mail.com'});
+      await userEvent.click(button);
+      const errorMessage = await screen.findByText('E-mail in use');
+      expect(errorMessage).toBeInTheDocument();
     });
   });
 
