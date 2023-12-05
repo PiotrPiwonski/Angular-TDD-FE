@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {UserService} from "../core/user.service";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import { FormControl, FormGroup, Validators} from "@angular/forms";
+import {passwordMatchValidator} from "./password-match.validator";
+
 
 @Component({
   selector: 'app-sign-up',
@@ -23,6 +25,8 @@ export class SignUpComponent implements OnInit {
       Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/)
     ]),
     passwordRepeat: new FormControl('')
+  }, {
+    validators: passwordMatchValidator
   });
 
   apiProgress = false;
@@ -64,6 +68,15 @@ export class SignUpComponent implements OnInit {
         return "Password is required";
       } else if(field.errors['pattern']) {
         return "Password must have at least 1 uppercase, 1 lowercase letter and 1 number";
+      }
+    }
+    return;
+  }
+
+  get passwordRepeatError() {
+    if(this.form?.errors && (this.form?.touched || this.form?.dirty)) {
+      if(this.form?.errors['passwordMatch']) {
+        return "Password mismatch"
       }
     }
     return;
