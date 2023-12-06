@@ -10,7 +10,7 @@ export const routes: Routes = [
   {
     path: 'signup', component: SignUpComponent
   }
-]
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

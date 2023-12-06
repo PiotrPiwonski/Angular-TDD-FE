@@ -1,7 +1,7 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {routes} from "./router/app-router.module";
 import { AppComponent } from './app.component';
 import {RouterTestingModule} from "@angular/router/testing";
-import {routes} from "./router/app-router.module"
 import {SignUpComponent} from "./sign-up/sign-up.component";
 import {HomeComponent} from "./home/home.component";
 import {Router} from "@angular/router";
