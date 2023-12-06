@@ -208,12 +208,20 @@ describe('SignUpComponent', () => {
           .findByText('Please check your e-mail to activation your account');
       expect(form).not.toBeInTheDocument();
     });
+
     it('displays validation error coming from backend after submit failure',
       async () => {
       await setupForm({email: 'not-unique@mail.com'});
       await userEvent.click(button);
       const errorMessage = await screen.findByText('E-mail in use');
       expect(errorMessage).toBeInTheDocument();
+    });
+
+    it('hides spinner after sign up request fails', async () => {
+      await setupForm({email: 'not-unique@mail.com'});
+      await userEvent.click(button);
+      await screen.findByText('E-mail in use');
+      expect(screen.queryByRole('status', {hidden: true})).not.toBeInTheDocument();
     });
   });
 
