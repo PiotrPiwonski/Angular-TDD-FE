@@ -116,6 +116,7 @@ export class SignUpComponent implements OnInit {
       error: (httpError: HttpErrorResponse) => {
         const emailValidationErrorMessage = httpError.error.validationErrors.email;
         this.form.get('email')?.setErrors({backend: emailValidationErrorMessage});
+        this.apiProgress = false;
       }
     });
   }
@@ -129,7 +130,8 @@ export class SignUpComponent implements OnInit {
     const  validationError = this.usernameError || this.emailError
     || this.passwordError || this.passwordRepeatError;
 
-   return  !formFilled || validationError ? true : false;
+   // return  !formFilled || validationError ? true : false;
+    return  !!(!formFilled || validationError);
   }
 
 }
