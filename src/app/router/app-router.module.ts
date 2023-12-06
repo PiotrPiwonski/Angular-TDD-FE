@@ -3,7 +3,7 @@ import {RouterModule, Routes} from "@angular/router";
 import {SignUpComponent} from "../sign-up/sign-up.component";
 import {HomeComponent} from "../home/home.component";
 
-const rotes: Routes = [
+export const routes: Routes = [
   {
     path: '', component: HomeComponent
   },
@@ -13,7 +13,7 @@ const rotes: Routes = [
 ]
 
 @NgModule({
-  imports: [RouterModule.forRoot(rotes)],
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
 export class AppRouterModule { }
