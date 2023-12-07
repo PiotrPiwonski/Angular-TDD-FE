@@ -9,6 +9,8 @@ import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {SharedModule} from "./shared/shared.module";
 import {ReactiveFormsModule} from "@angular/forms";
 import {LoginComponent} from "./login/login.component";
+import {ActivateComponent} from "./activate/activate.component";
+import {UserComponent} from "./user/user.component";
 // import {AppModule} from "./app.module";
 
 describe('AppComponent', () => {
@@ -25,7 +27,9 @@ describe('AppComponent', () => {
         AppComponent,
         SignUpComponent,
         HomeComponent,
-        LoginComponent
+        UserComponent,
+        LoginComponent,
+        ActivateComponent
       ],
       imports: [
         RouterTestingModule.withRoutes(routes),
@@ -46,15 +50,17 @@ describe('AppComponent', () => {
 
   describe('Routing', () => {
 
-    const testCases = [
+    const routingTests = [
       {path: '/', pageId: 'home-page'},
       {path: '/signup', pageId: 'sign-up-page'},
       {path: '/login', pageId: 'login-page'},
       {path: '/user/1', pageId: 'user-page'},
       {path: '/user/2', pageId: 'user-page'},
+      {path: '/activate/123', pageId: 'activation-page'},
+      {path: '/activate/456', pageId: 'activation-page'},
     ];
 
-    testCases.forEach(({path, pageId}) => {
+    routingTests.forEach(({path, pageId}) => {
       it(`displays ${pageId} when path is ${path}`, async () => {
         await router.navigate([path]);
         fixture.detectChanges();
