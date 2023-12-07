@@ -18,4 +18,8 @@ export class UserService {
       email: value
     })
   }
+
+  activate(token: string) {
+    return this.httpClient.post('/api/1.0/users/token/' + token, {});
+  }
 }
