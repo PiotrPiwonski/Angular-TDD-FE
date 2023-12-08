@@ -12,13 +12,28 @@ import {LoginComponent} from "./login/login.component";
 import {ActivateComponent} from "./activate/activate.component";
 import {setupServer} from "msw/node";
 import {rest} from "msw";
+import {UserListComponent} from "./home/user-list/user-list.component";
 
 
 const server = setupServer(
   rest.post('/api/1.0/users/token/:token',
     (req, res, ctx) => {
       return res(ctx.status(200));
-    })
+    }),
+  rest.get('/api/1.0/users', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json({
+      "content": [
+        {
+          "id": 1,
+          "username": "user1",
+          "email": "user1@mail.com"
+        },
+      ],
+      "page": 0,
+      "size": 3,
+      "totalPages": 1
+    }));
+  })
 );
 
 beforeEach(() => {
@@ -36,7 +51,8 @@ const setup = async (path: string) => {
       SignUpComponent,
       UserComponent,
       LoginComponent,
-      ActivateComponent
+      ActivateComponent,
+      UserListComponent
     ],
     imports: [HttpClientModule, SharedModule, ReactiveFormsModule],
     routes: routes
