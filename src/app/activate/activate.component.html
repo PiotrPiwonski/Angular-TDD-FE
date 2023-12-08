@@ -2,7 +2,7 @@
   <span
     *ngIf="activationStatus === 'inProgress'"
     class="spinner-border spinner-border-sm"
-    role="status" aria-hidden="true"></span>
+    role="status"></span>
   <app-alert *ngIf="activationStatus === 'success'">
     Account is activated</app-alert>
   <app-alert *ngIf="activationStatus === 'fail'" type="danger">

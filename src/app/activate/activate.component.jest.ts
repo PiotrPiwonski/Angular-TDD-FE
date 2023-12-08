@@ -36,7 +36,7 @@ const server = setupServer(
     (req, res, ctx) => {
     counter += 1;
     if(req.params['token'] === '456') {
-      return res(ctx.status(400), ctx.json({}));
+      return res(ctx.status(400), ctx.json({}), ctx.delay(50));
     }
     return res(ctx.status(200));
     })
@@ -78,8 +78,7 @@ describe('Account Activation Page', () => {
   it('displays spinner during activation api call', async () => {
     await setup();
     subscriber.next({id: '456'});
-    const spinner = await screen.queryByRole('status');
-    // const spinner = await screen.findByRole('status');
+    const spinner = await screen.findByRole('status');
     await screen.findByText('Activation failure');
     expect(spinner).not.toBeInTheDocument();
   });

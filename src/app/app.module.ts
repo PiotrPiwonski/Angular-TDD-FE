@@ -11,6 +11,7 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { UserComponent } from './user/user.component';
 import { ActivateComponent } from './activate/activate.component';
+import { UserListComponent } from './home/user-list/user-list.component';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { ActivateComponent } from './activate/activate.component';
     HomeComponent,
     LoginComponent,
     UserComponent,
-    ActivateComponent
+    ActivateComponent,
+    UserListComponent
   ],
   imports: [
     BrowserModule,
