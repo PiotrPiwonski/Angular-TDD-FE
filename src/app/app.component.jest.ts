@@ -95,10 +95,18 @@ describe('Routing', () => {
   `('displays $visiblePage after clicking $clickingTo link',
     async ({initialPath, clickingTo, visiblePage}) => {
     await setup(initialPath);
-      const link = screen.getByRole('link', {name: clickingTo});
-      await userEvent.click(link);
-      const page = await screen.findByTestId(visiblePage);
-      expect(page).toBeInTheDocument();
+    const link = screen.getByRole('link', {name: clickingTo});
+    await userEvent.click(link);
+    const page = await screen.findByTestId(visiblePage);
+    expect(page).toBeInTheDocument();
     });
 
+  it('navigates to user page when clicking the username on user list',
+    async () => {
+    await setup('/');
+    const userListItem = await screen.findByText('user1');
+    await userEvent.click(userListItem);
+    const page = await screen.findByTestId('user-page');
+    expect(page).toBeInTheDocument();
+    });
 });
