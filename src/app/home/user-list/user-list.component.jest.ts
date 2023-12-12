@@ -88,4 +88,11 @@ describe('User List', () => {
     const firstUserInFirstPage = await screen.findByText('user1');
     expect(firstUserInFirstPage).toBeInTheDocument();
   });
+
+  it('displays spinner during the api call', async () => {
+    await setup();
+    const spinner = screen.getByRole('status');
+    await screen.findByText('user1');
+    expect(spinner).not.toBeInTheDocument();
+  });
 });
