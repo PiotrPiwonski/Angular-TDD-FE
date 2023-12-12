@@ -13,6 +13,7 @@ import {ActivateComponent} from "./activate/activate.component";
 import {UserComponent} from "./user/user.component";
 import {UserListComponent} from "./home/user-list/user-list.component";
 import {Location} from "@angular/common";
+import {UserListItemComponent} from "./home/user-list-item/user-list-item.component";
 // import {AppModule} from "./app.module";
 
 describe('AppComponent', () => {
@@ -34,7 +35,8 @@ describe('AppComponent', () => {
         UserComponent,
         LoginComponent,
         ActivateComponent,
-        UserListComponent
+        UserListComponent,
+        UserListItemComponent
       ],
       imports: [
         RouterTestingModule.withRoutes(routes),
