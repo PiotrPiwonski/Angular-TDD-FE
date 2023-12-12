@@ -13,6 +13,7 @@ import {ActivateComponent} from "./activate/activate.component";
 import {setupServer} from "msw/node";
 import {rest} from "msw";
 import {UserListComponent} from "./home/user-list/user-list.component";
+import {UserListItemComponent} from "./home/user-list-item/user-list-item.component";
 
 
 const server = setupServer(
@@ -52,7 +53,8 @@ const setup = async (path: string) => {
       UserComponent,
       LoginComponent,
       ActivateComponent,
-      UserListComponent
+      UserListComponent,
+      UserListItemComponent
     ],
     imports: [HttpClientModule, SharedModule, ReactiveFormsModule],
     routes: routes
