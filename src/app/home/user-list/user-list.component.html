@@ -5,7 +5,9 @@
   <ul class="list-group list-group-flush">
     <li
       class="list-group-item list-group-item-action"
-      *ngFor="let user of page.content">
+      *ngFor="let user of page.content"
+      (click)="navigate(user.id)"
+    >
       {{user.username}}
     </li>
   </ul>
