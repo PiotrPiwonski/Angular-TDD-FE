@@ -7,7 +7,7 @@ import {HomeComponent} from "./home/home.component";
 import {Router} from "@angular/router";
 import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
 import {SharedModule} from "./shared/shared.module";
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {LoginComponent} from "./login/login.component";
 import {ActivateComponent} from "./activate/activate.component";
 import {UserComponent} from "./user/user.component";
@@ -42,7 +42,8 @@ describe('AppComponent', () => {
         RouterTestingModule.withRoutes(routes),
         HttpClientTestingModule,
         SharedModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        FormsModule
       ]
     }).compileComponents();
   });

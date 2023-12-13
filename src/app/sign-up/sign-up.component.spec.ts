@@ -108,7 +108,6 @@ describe('SignUpComponent', () => {
       httpTestingController = TestBed.inject(HttpTestingController);
       signUp = fixture.nativeElement as HTMLElement;
 
-      await fixture.whenStable();
       const usernameInput = signUp
         .querySelector('input[id="username"]') as HTMLInputElement;
       const emailInput = signUp
