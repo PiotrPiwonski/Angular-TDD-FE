@@ -24,6 +24,7 @@
           email
           #emailInput="ngModel"
           [ngClass]="isInvalid(emailInput.control) ? 'is-invalid' : ''"
+          (ngModelChange)="onChange()"
         />
 <!--        {{emailInput.control.errors | json}}-->
         <div *ngIf="isInvalid(emailInput.control)"
@@ -49,6 +50,7 @@
           required
           #passwordInput="ngModel"
           [ngClass]="isInvalid(passwordInput.control) ? 'is-invalid' : ''"
+          (ngModelChange)="onChange()"
         />
         <div *ngIf="isInvalid(passwordInput.control)"
              data-testid="password-validation"

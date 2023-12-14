@@ -70,15 +70,17 @@ describe('LoginComponent', () => {
     let button: any;
     let httpTestingController: HttpTestingController;
     let loginPage: HTMLElement;
+    let emailInput: HTMLInputElement;
+    let passwordInput: HTMLInputElement;
 
     const setupForm = async (email:string = 'user1@mail.com') => {
       httpTestingController = TestBed.inject(HttpTestingController);
       loginPage = fixture.nativeElement as HTMLElement;
 
       await fixture.whenStable();
-      const emailInput = loginPage
+      emailInput = loginPage
         .querySelector('input[id="email"]') as HTMLInputElement;
-      const passwordInput = loginPage
+      passwordInput = loginPage
         .querySelector('input[id="password"]') as HTMLInputElement;
       emailInput.value = email;
       emailInput.dispatchEvent(new Event('input'));
@@ -156,6 +158,42 @@ describe('LoginComponent', () => {
       });
       fixture.detectChanges();
       expect(loginPage.querySelector('span[role="status"]')).toBeFalsy();
+    });
+
+    it('clears error after email is changed', async () => {
+      await setupForm();
+      button?.click();
+      const req = httpTestingController.expectOne('/api/1.0/auth');
+      req.flush({
+        message: 'Incorrect Credentials'
+      }, {
+        status: 401,
+        statusText: 'Unauthorized'
+      });
+      fixture.detectChanges();
+      emailInput.value = "valid@mail.com";
+      emailInput.dispatchEvent(new Event('input'));
+      fixture.detectChanges();
+      const error = loginPage.querySelector('.alert');
+      expect(error).toBeFalsy();
+    });
+
+    it('clears error after password is changed', async () => {
+      await setupForm();
+      button?.click();
+      const req = httpTestingController.expectOne('/api/1.0/auth');
+      req.flush({
+        message: 'Incorrect Credentials'
+      }, {
+        status: 401,
+        statusText: 'Unauthorized'
+      });
+      fixture.detectChanges();
+      passwordInput.value = "P4ssword2";
+      passwordInput.dispatchEvent(new Event('input'));
+      fixture.detectChanges();
+      const error = loginPage.querySelector('.alert');
+      expect(error).toBeFalsy();
     });
   });
   describe('Validation', () => {

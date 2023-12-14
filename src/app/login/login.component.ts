@@ -48,4 +48,8 @@ export class LoginComponent implements OnInit {
     return invalid && (dirty || touched);
   }
 
+  onChange() {
+    this.error = '';
+  }
+
 }
