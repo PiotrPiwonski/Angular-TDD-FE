@@ -20,7 +20,23 @@
           id="email"
           [(ngModel)]="email"
           name="email"
+          required
+          email
+          #emailInput="ngModel"
+          [ngClass]="isInvalid(emailInput.control) ? 'is-invalid' : ''"
         />
+<!--        {{emailInput.control.errors | json}}-->
+        <div *ngIf="isInvalid(emailInput.control)"
+          data-testid="email-validation"
+             class="invalid-feedback"
+        >
+          <div *ngIf="emailInput.errors?.['required']">
+            E-mail is required
+          </div>
+          <div *ngIf="emailInput.errors?.['email']">
+            Invalid e-mail address
+          </div>
+        </div>
       </div>
       <div class="mb-3">
         <label class="form-label" for="password">Password</label>
@@ -30,12 +46,23 @@
           type="password"
           [(ngModel)]="password"
           name="password"
+          required
+          #passwordInput="ngModel"
+          [ngClass]="isInvalid(passwordInput.control) ? 'is-invalid' : ''"
         />
+        <div *ngIf="isInvalid(passwordInput.control)"
+             data-testid="password-validation"
+             class="invalid-feedback"
+        >
+          <div *ngIf="passwordInput.errors?.['required']">
+            Password is required
+          </div>
+        </div>
       </div>
       <app-alert *ngIf="error" type="danger">{{error}}</app-alert>
       <div class="text-center">
         <app-button
-          [disabled]="isDisabled() || apiProgress"
+          [disabled]="isDisabled()"
           [apiProgress]="apiProgress"
         >
           Login

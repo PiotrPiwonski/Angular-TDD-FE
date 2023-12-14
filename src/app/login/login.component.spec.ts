@@ -71,7 +71,7 @@ describe('LoginComponent', () => {
     let httpTestingController: HttpTestingController;
     let loginPage: HTMLElement;
 
-    const setupForm = async () => {
+    const setupForm = async (email:string = 'user1@mail.com') => {
       httpTestingController = TestBed.inject(HttpTestingController);
       loginPage = fixture.nativeElement as HTMLElement;
 
@@ -80,7 +80,7 @@ describe('LoginComponent', () => {
         .querySelector('input[id="email"]') as HTMLInputElement;
       const passwordInput = loginPage
         .querySelector('input[id="password"]') as HTMLInputElement;
-      emailInput.value = 'user1@mail.com';
+      emailInput.value = email;
       emailInput.dispatchEvent(new Event('input'));
       emailInput.dispatchEvent(new Event('blur'));
       passwordInput.value = 'P4ssword';
@@ -93,6 +93,11 @@ describe('LoginComponent', () => {
       async () => {
         await setupForm();
         expect(button?.disabled).toBeFalsy();
+    });
+
+    it('does not enable button when fields are invalid', async () => {
+      await setupForm('a');
+      expect(button?.disabled).toBeTruthy();
     });
 
     it('sends email and password after clicking the button', async () => {
@@ -151,6 +156,32 @@ describe('LoginComponent', () => {
       });
       fixture.detectChanges();
       expect(loginPage.querySelector('span[role="status"]')).toBeFalsy();
+    });
+  });
+  describe('Validation', () => {
+    const testCase = [
+      {field: 'email', value: '', error: 'E-mail is required'},
+      {field: 'email', value: 'wrong-format', error: 'Invalid e-mail address'},
+      {field: 'password', value: '', error: 'Password is required'},
+    ];
+
+    testCase.forEach(({field, value, error}) => {
+      it(`displays ${error} when ${field} has '${value}'`, async () => {
+        await fixture.whenStable();
+        const loginPage = fixture.nativeElement as HTMLElement;
+        expect(loginPage
+          .querySelector(`div[data-testid="${field}-validation"]`)).toBeNull();
+        const input = loginPage
+          .querySelector(`input[id="${field}"]`) as HTMLInputElement;
+        input.value = value;
+        input.dispatchEvent(new Event('input'));
+        input.dispatchEvent(new Event('blur'));
+        fixture.detectChanges();
+        const validationElement = loginPage
+          .querySelector(`div[data-testid="${field}-validation"]`);
+        expect(validationElement?.textContent)
+          .toContain(error);
+      });
     });
   });
 });
