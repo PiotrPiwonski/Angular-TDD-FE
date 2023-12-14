@@ -147,7 +147,31 @@ describe('LoginComponent', () => {
       await screen.findByText('Incorrect Credentials');
       expect(screen.queryByRole('status', {hidden: true})).not.toBeInTheDocument();
     });
+
+    it('does not enable button when fields are invalid', async () => {
+      await setupForm({email: 'a'});
+      expect(button).toBeDisabled();
+    });
   });
 
+  describe('Validation', () => {
+
+    it.each`
+    label         | inputValue              | message
+    ${'E-mail'}   | ${'{space}{backspace}'} | ${'E-mail is required'}
+    ${'E-mail'}   | ${'wrong-format'}       | ${'Invalid e-mail address'}
+    ${'Password'} | ${'{space}{backspace}'} | ${'Password is required'}
+    `('displays $message when $label has the value "$inputValue"',
+      async ({label, inputValue, message}) => {
+        await setup();
+        expect(screen.queryByText(message)).not.toBeInTheDocument();
+        const input = screen.getByLabelText(label);
+        await userEvent.type(input, inputValue);
+        await userEvent.tab();
+        const errorMessage = await screen.findByText(message);
+        expect(errorMessage).toBeInTheDocument();
+      });
+
+  });
 });
 
