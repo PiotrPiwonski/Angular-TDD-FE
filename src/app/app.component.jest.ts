@@ -42,6 +42,12 @@ const server = setupServer(
       username: `user${id}`,
       email: `user${id}@mail.com`
     }));
+  }),
+  rest.post('/api/1.0/auth', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json({
+      id: 1,
+      username: 'user1'
+    }))
   })
 );
 
@@ -119,4 +125,25 @@ describe('Routing', () => {
     const page = await screen.findByTestId('user-page');
     expect(page).toBeInTheDocument();
     });
+});
+
+describe('Login', () => {
+  let button: any;
+  let emailInput: HTMLInputElement;
+  let passwordInput: HTMLInputElement;
+
+  const setupForm = async (values?: {email: string}) => {
+    await setup('/login');
+    emailInput = screen.getByLabelText('E-mail');
+    passwordInput = screen.getByLabelText('Password');
+    await userEvent.type(emailInput, values?.email || 'user1@mail.com');
+    await userEvent.type(passwordInput, 'P4ssword');
+    button = screen.getByRole('button', {name: 'Login'});
+  };
+  it('redirect to home page after successful login', async () => {
+    await setupForm();
+    await userEvent.click(button);
+    const homePage = await screen.findByTestId('home-page');
+    expect(homePage).toBeInTheDocument();
+  });
 });
