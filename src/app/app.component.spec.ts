@@ -14,6 +14,7 @@ import {UserComponent} from "./user/user.component";
 import {UserListComponent} from "./home/user-list/user-list.component";
 import {Location} from "@angular/common";
 import {UserListItemComponent} from "./home/user-list-item/user-list-item.component";
+import {LoggedInUser} from "./shared/types";
 // import {AppModule} from "./app.module";
 
 describe('AppComponent', () => {
@@ -25,7 +26,7 @@ describe('AppComponent', () => {
 
   let appComponent: HTMLElement;
 
-  beforeEach(async () => {
+  const setup =async () => {
     await TestBed.configureTestingModule({
       // imports: [AppModule, RouterTestingModule.withRoutes(routes)] - nie polecane
       declarations: [
@@ -46,9 +47,6 @@ describe('AppComponent', () => {
         FormsModule
       ]
     }).compileComponents();
-  });
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(AppComponent);
     router = TestBed.inject(Router);
     location = TestBed.inject(Location);
@@ -56,6 +54,14 @@ describe('AppComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
     appComponent = fixture.nativeElement;
+  };
+
+  beforeEach(() => {
+
+  });
+
+  afterEach(() => {
+    localStorage.clear();
   });
 
   describe('Routing', () => {
@@ -72,6 +78,7 @@ describe('AppComponent', () => {
 
     routingTests.forEach(({path, pageId}) => {
       it(`displays ${pageId} when path is ${path}`, async () => {
+        await setup();
         await router.navigate([path]);
         fixture.detectChanges();
         const page = appComponent.querySelector(`[data-testid="${pageId}"]`);
@@ -87,6 +94,7 @@ describe('AppComponent', () => {
 
     linkTests.forEach(({path, title}) => {
       it(`has link with title ${title} to ${path}`, async () => {
+        await setup();
         const linkElement = appComponent
           .querySelector(`a[title="${title}"]`) as HTMLAnchorElement;
         expect(linkElement.pathname).toEqual(path);
@@ -116,6 +124,7 @@ describe('AppComponent', () => {
       it(`displays ${visiblePage} after clicking ${clickingTo} link`,
         fakeAsync(
           async () => {
+            await setup();
             await router.navigate([initialPath]);
             const linkElement = appComponent
               .querySelector(`a[title="${clickingTo}"]`) as HTMLAnchorElement;
@@ -130,6 +139,7 @@ describe('AppComponent', () => {
 
     it('navigates to user page when clicking the username on user list',
       fakeAsync(async () => {
+      await setup();
       await router.navigate(['/']);
         fixture.detectChanges();
       const request = httpTestingController.expectOne(() => true);
@@ -159,6 +169,7 @@ describe('AppComponent', () => {
     let passwordInput: HTMLInputElement;
 
     const setupLogin = fakeAsync(async () => {
+      await setup();
       await router.navigate(['/login']);
       fixture.detectChanges();
 
@@ -224,5 +235,21 @@ describe('AppComponent', () => {
         expect(page).toBeTruthy();
         expect(location.path()).toEqual('/user/1');
       });
+
+    it('stores logged in state in local storage', async () => {
+      await setupLogin();
+      const state = JSON.parse(localStorage.getItem('auth')!) as LoggedInUser;
+      expect(state.isLoggedIn).toBe(true);
+    });
+
+    it('displays layout of logged in user', async () => {
+      localStorage.setItem('auth', JSON.stringify({isLoggedIn: true}));
+      await setup();
+      await router.navigate(['/']);
+      fixture.detectChanges();
+      const myProfileLink = appComponent
+        .querySelector('a[title="My Profile"]');
+      expect(myProfileLink).toBeTruthy();
+    });
   });
 });
