@@ -15,6 +15,7 @@ import {rest} from "msw";
 import {UserListComponent} from "./home/user-list/user-list.component";
 import {UserListItemComponent} from "./home/user-list-item/user-list-item.component";
 import {ProfileCardComponent} from "./user/profile-card/profile-card.component";
+import {LoggedInUser} from "./shared/types";
 
 
 const server = setupServer(
@@ -59,6 +60,10 @@ beforeEach(() => {
 beforeAll(() => server.listen());
 
 afterAll(() => server.close());
+
+afterEach(() => {
+  localStorage.clear();
+});
 
 const setup = async (path: string) => {
   const {navigate} = await render(AppComponent, {
@@ -175,4 +180,19 @@ describe('Login', () => {
       const header = await screen.findByRole('heading', {name: 'user1'});
       expect(header).toBeInTheDocument();
     });
+
+  it('stores logged in state in local storage', async () => {
+    await setupForm();
+    await userEvent.click(button);
+    await screen.findByTestId('home-page');
+    const state = JSON.parse(localStorage.getItem('auth')!) as LoggedInUser;
+    expect(state.isLoggedIn).toBe(true);
+  });
+
+  it('displays layout of logged in user', async () => {
+    localStorage.setItem('auth', JSON.stringify({isLoggedIn: true}));
+    await setup('/');
+    const myProfileLink = await screen.findByRole('link', {name: 'My Profile'});
+    expect(myProfileLink).toBeInTheDocument();
+  });
 });
