@@ -39,4 +39,8 @@ export class UserService {
       password
     })
   }
+
+  logout() {
+    return this.httpClient.post('/api/1.0/logout', {});
+  }
 }
